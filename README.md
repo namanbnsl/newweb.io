@@ -1,5 +1,7 @@
 <h1 align="center">newweb.io 🕸️</h1>
 
+ - We Are Open Source 😃 using the MIT license 📝.
+
  - ### Links 🔗
     <a href="https://github.com/users/coding1101/projects/8/insights/1">Insights 💹</a> <br />
     <a href="https://github.com/users/coding1101/projects/8">Project 🎦</a> <br />
