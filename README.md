@@ -1,16 +1,18 @@
 <h1 align="center">newweb.io 🕸️</h1>
 
- - We Are Open Source 😃 using the MIT license 📝.
+- We Are Open Source 😃 using the MIT license 📝.
 
- - ### Links 🔗
-    <a href="https://github.com/users/coding1101/projects/8/insights/1">Insights 💹</a> <br />
-    <a href="https://github.com/users/coding1101/projects/8">Project 🎦</a> <br />
-    <a href="https://github.com/coding1101/newweb.io/issues">Issues 🐛</a> <br />
+- ### Links 🔗
 
- - ### Chat on **discussions** ⌨️
-     <a href="https://github.com/coding1101/newweb.io/discussions">Discuss 🤝</a>
+  <a href="https://github.com/users/coding1101/projects/8/insights/1">Insights 💹</a> <br />
+  <a href="https://github.com/users/coding1101/projects/8">Project 🎦</a> <br />
+  <a href="https://github.com/coding1101/newweb.io/issues">Issues 🐛</a> <br />
 
- - ### We need contributors! 💖
-    <a href="https://github.com/coding1101/newweb.io/graphs/contributors">
-      <img src="https://contrib.rocks/image?repo=coding1101/newweb.io" />
-    </a>
+- ### Chat on **discussions** ⌨️
+
+  <a href="https://github.com/coding1101/newweb.io/discussions">Discuss 🤝</a>
+
+- ### We need contributors! 💖
+   <a href="https://github.com/coding1101/newweb.io/graphs/contributors">
+     <img src="https://contrib.rocks/image?repo=coding1101/newweb.io" />
+   </a>
