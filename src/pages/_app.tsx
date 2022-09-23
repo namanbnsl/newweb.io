@@ -3,29 +3,33 @@ import { loggerLink } from '@trpc/client/links/loggerLink'
 import { withTRPC } from '@trpc/next'
 import type { AppType } from 'next/dist/shared/lib/utils'
 import Head from 'next/head'
+import { Toaster } from 'react-hot-toast'
 import superjson from 'superjson'
 import type { AppRouter } from '../server/router'
 import '../styles/globals.css'
 
 const App: AppType = ({ Component, pageProps }) => {
   return (
-    <div>
-      <Head>
-        <title>NewWeb</title>
+    <>
+      <Toaster />
+      <div>
+        <Head>
+          <title>NewWeb</title>
 
-        <meta
-          name='description'
-          content='neweb.io - blogging site (best)'
-        />
+          <meta
+            name='description'
+            content='neweb.io - blogging site (best)'
+          />
 
-        <link
-          rel='icon'
-          href='/favicon.png'
-        />
-      </Head>
+          <link
+            rel='icon'
+            href='/favicon.png'
+          />
+        </Head>
 
-      <Component {...pageProps} />
-    </div>
+        <Component {...pageProps} />
+      </div>
+    </>
   )
 }
 
