@@ -1,17 +1,30 @@
 import Link from 'next/link'
-import { useEffect } from 'react'
-import { toast } from 'react-hot-toast'
+import { useEffect, useState } from 'react'
 import useAuth from '../../hooks/useAuth'
+import { trpc } from '../utils/trpc'
 
 const Navbar = () => {
-  const { connectWallet, account, accountFound, switchAccount, error } =
-    useAuth()
+  const { connectWallet, account, accountFound, switchAccount } = useAuth()
+
+  const [isPro, setIsPro] = useState<boolean>()
+
+  const isProQuery = trpc.useQuery([
+    'user.isPro',
+    { address: account && accountFound ? account : '' }
+  ])
 
   useEffect(() => {
-    if (error) {
-      toast.error('Make Sure You Have A Wallet!')
+    console.log(isProQuery.data)
+
+    if (
+      account &&
+      isProQuery.data &&
+      !isProQuery.isLoading &&
+      isProQuery.data[0]?.isPro
+    ) {
+      setIsPro(true)
     }
-  }, [error])
+  }, [isProQuery])
 
   return (
     <nav className='mt-16'>
@@ -20,7 +33,7 @@ const Navbar = () => {
           <div className='flex'>
             <div>
               <Link href={'/'}>
-                <a className='flex items-center'>
+                <a className='flex items-center hover:text-red-400'>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
@@ -36,9 +49,7 @@ const Navbar = () => {
                     />
                   </svg>
 
-                  <span className='font-bold hover:text-red-400'>
-                    newweb.io
-                  </span>
+                  <span className='font-bold'>newweb.io</span>
                 </a>
               </Link>
             </div>
@@ -83,7 +94,31 @@ const Navbar = () => {
                       d='M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z'
                     />
                   </svg>
-                  <span>Pro Subscription</span>
+
+                  <span>{isPro ? 'Tip' : 'Pro Subscription'}</span>
+                </a>
+              </Link>
+            ) : null}
+
+            {account && accountFound ? (
+              <Link href={'/create'}>
+                <a className='underline hover:text-red-400 font-medium mr-16 flex items-center'>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    strokeWidth={1.5}
+                    stroke='currentColor'
+                    className='w-6 h-6 mr-1'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z'
+                    />
+                  </svg>
+
+                  <span>Create</span>
                 </a>
               </Link>
             ) : null}
