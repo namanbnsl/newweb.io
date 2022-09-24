@@ -9,6 +9,16 @@ datasource db {
 
 model User {
   id String @id @default(cuid())
-  address String
+  address String @unique
   isPro Boolean
+  blogs Blog[]
+}
+
+model Blog {
+  id String @id @default(cuid())
+  writer User @relation(fields: [writerAddress], references: [address])
+  writerAddress String
+  title String
+  content String
+  isBlogForPros Boolean
 }
