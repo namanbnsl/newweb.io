@@ -34,5 +34,24 @@ const blogRouter = createRouter()
       return blogs
     }
   })
+  .query('findById', {
+    input: z.object({ id: z.string() }),
+    async resolve({ input }) {
+      const data = await prisma.blog.findUnique({
+        where: {
+          id: input.id
+        },
+        select: {
+          content: true,
+          title: true
+        }
+      })
+
+      return {
+        title: data?.title,
+        content: data?.content
+      }
+    }
+  })
 
 export default blogRouter

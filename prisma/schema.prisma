@@ -12,6 +12,7 @@ model User {
   address String @unique
   isPro Boolean
   blogs Blog[]
+  earnings Float
 }
 
 model Blog {

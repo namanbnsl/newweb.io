@@ -11,7 +11,8 @@ const userRouter = createRouter()
       await prisma.user.create({
         data: {
           address: input.address,
-          isPro: false
+          isPro: false,
+          earnings: 0
         }
       })
 
@@ -23,7 +24,7 @@ const userRouter = createRouter()
       address: z.string()
     }),
     async resolve({ input }) {
-      const data = await prisma.user.findMany({
+      const data = await prisma.user.findUnique({
         where: {
           address: input.address
         },
@@ -40,7 +41,7 @@ const userRouter = createRouter()
       address: z.string()
     }),
     async resolve({ input }) {
-      const data = await prisma.user.findMany({
+      const data = await prisma.user.findUnique({
         where: {
           address: input.address
         },
