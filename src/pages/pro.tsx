@@ -1,18 +1,19 @@
 import type { NextPage } from 'next'
 import { useEffect, useRef, useState } from 'react'
-import { toast } from 'react-hot-toast'
 import useAuth from '../../hooks/useAuth'
-import usePro from '../../hooks/usePro'
+import useTransfer from '../../hooks/useTransfer'
+import Loading from '../components/Loading'
 import Navbar from '../components/Navbar'
 import { trpc } from '../utils/trpc'
 
 const ProPage: NextPage = () => {
-  const { sendToOwner, tip, isEthereum } = usePro()
+  const { sendToOwner, tip, isEthereum, sendToOwnerLoading, tipLoading } =
+    useTransfer()
   const { account, accountFound, connectWallet } = useAuth()
 
   const [isPro, setIsPro] = useState<boolean>()
 
-  const tipRef = useRef<HTMLInputElement>(null)
+  const [tipState, setTipState] = useState('')
 
   const isProQuery = trpc.useQuery([
     'user.isPro',
@@ -26,11 +27,19 @@ const ProPage: NextPage = () => {
       isProQuery.data &&
       !isProQuery.isLoading &&
       !isProQuery.isError &&
-      isProQuery.data[0]?.isPro
+      isProQuery.data?.isPro
     ) {
       setIsPro(true)
     }
   }, [isProQuery])
+
+  if (isEthereum) {
+    if (account && accountFound && sendToOwnerLoading) return <Loading />
+  }
+
+  if (isEthereum) {
+    if (account && accountFound && tipLoading) return <Loading />
+  }
 
   if (isEthereum) {
     if (account && accountFound) {
@@ -48,7 +57,7 @@ const ProPage: NextPage = () => {
               <span className='text-xl font-bold mt-24'>
                 Tip (In MATIC):{' '}
                 <input
-                  ref={tipRef}
+                  onChange={(event) => setTipState(event.target.value)}
                   type='text'
                   placeholder='Tip'
                   className='px-5 ml-2 rounded-lg py-3 font-normal outline-none focus:border-red-200 border-4 border-gray-100'
@@ -57,11 +66,10 @@ const ProPage: NextPage = () => {
 
               <button
                 onClick={() => {
-                  if (
-                    tipRef.current?.value &&
-                    parseFloat(tipRef.current.value) !== 0
-                  ) {
-                    const totalPrice: number = parseFloat(tipRef.current.value)
+                  console.log(tipState)
+
+                  if (tipState && parseFloat(tipState) !== 0) {
+                    const totalPrice: number = parseFloat(tipState)
 
                     tip(totalPrice.toString())
                   }
@@ -92,7 +100,9 @@ const ProPage: NextPage = () => {
               <span className='text-xl font-bold'>
                 Tip (In MATIC):{' '}
                 <input
-                  ref={tipRef}
+                  onChange={(event) => {
+                    setTipState(event.target.value)
+                  }}
                   type='text'
                   placeholder='Tip'
                   className='px-5 ml-2 rounded-lg py-3 font-normal outline-none focus:border-red-200 border-4 border-gray-100'
@@ -101,11 +111,10 @@ const ProPage: NextPage = () => {
 
               <button
                 onClick={() => {
-                  if (
-                    tipRef.current?.value &&
-                    parseFloat(tipRef.current.value) !== 0
-                  ) {
-                    const tip: number = parseFloat(tipRef.current.value)
+                  console.log(tipState)
+
+                  if (tipState && parseFloat(tipState) !== 0) {
+                    const tip: number = parseFloat(tipState)
                     const totalPrice: number = 1 + tip
 
                     sendToOwner(totalPrice.toString())

@@ -95,7 +95,7 @@ const CreatePage: NextPage = () => {
 
                     toast.success('Blog Created!')
 
-                    router.push('/')
+                    router.replace('/')
                   }
                 } catch (err) {
                   toast.error('There Was An Error!')
