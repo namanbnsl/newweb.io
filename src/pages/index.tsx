@@ -55,74 +55,83 @@ const Home: NextPage = () => {
         {isPro ? (
           <>
             {blogs?.map((blog) => (
-              <Link href={`/post/${blog.id}`}>
-                <div
-                  className='p-10 bg-slate-50 m-10 rounded-xl cursor-pointer hover:bg-slate-100'
-                  key={blog.id}
+              <div
+                className='p-10 bg-slate-50 m-10 rounded-xl cursor-pointer hover:bg-slate-100'
+                key={blog.id}
+              >
+                <Link href={`/post/${blog.id}`}>
+                  <a>
+                    <span className='font-bold'>Name:</span> {blog.title}
+                    <div className='flex justify-end'>
+                      <span className='font-bold mr-1'>By:</span>
+                      {blog.writerAddress === account
+                        ? 'You'
+                        : blog.writerAddress}
+                    </div>
+                  </a>
+                </Link>
+                <input
+                  onChange={(event) => setTipState(event.target.value)}
+                  type='text'
+                  placeholder='Tip'
+                  className='px-5 rounded-lg py-3 font-normal outline-none focus:border-red-200 border-4 border-gray-100'
+                />
+                <br />
+                <button
+                  onClick={() => {
+                    tipCreator(blog.writerAddress, tipState)
+                  }}
+                  className='bg-red-400 mt-2 text-white px-32 text-md duration-300 transition-all py-5 border-4 rounded-lg hover:bg-transparent hover:text-gray-700 border-red-400'
                 >
-                  <span className='font-bold'>Name:</span> {blog.title}
-                  <div className='flex justify-end'>
-                    <span className='font-bold mr-1'>By:</span>
-                    {blog.writerAddress === account
-                      ? 'You'
-                      : blog.writerAddress}
-                  </div>
-                  <input
-                    onChange={(event) => setTipState(event.target.value)}
-                    type='text'
-                    placeholder='Tip'
-                    className='px-5 rounded-lg py-3 font-normal outline-none focus:border-red-200 border-4 border-gray-100'
-                  />
-                  <br />
-                  <button
-                    onClick={() => {
-                      tipCreator(blog.writerAddress, tipState)
-                    }}
-                    className='bg-red-400 mt-2 text-white px-32 text-md duration-300 transition-all py-5 border-4 rounded-lg hover:bg-transparent hover:text-gray-700 border-red-400'
-                  >
-                    Tip Creator
-                  </button>
-                </div>
-              </Link>
+                  Tip Creator
+                </button>
+              </div>
             ))}
           </>
         ) : (
           <>
-            {blogs?.map((blog) => (
+            {account && accountFound ? (
               <>
-                {!blog.isBlogForPros && (
-                  <Link href={`/post/${blog.id}`}>
-                    <div
-                      className='p-10 bg-slate-50 m-10 rounded-xl cursor-pointer hover:bg-slate-100'
-                      key={blog.id}
-                    >
-                      <span className='font-bold'>Name:</span> {blog.title}
-                      <div className='flex justify-end'>
-                        <span className='font-bold mr-1'>By:</span>
-                        {blog.writerAddress === account
-                          ? 'You'
-                          : blog.writerAddress}
-                      </div>
-                      <input
-                        onChange={(event) => setTipState(event.target.value)}
-                        type='text'
-                        placeholder='Tip'
-                        className='px-5 rounded-lg py-3 font-normal outline-none focus:border-red-200 border-4 border-gray-100'
-                      />
-                      <br />
-                      <button
-                        onClick={() => {
-                          tipCreator(blog.writerAddress, tipState)
-                        }}
-                        className='bg-red-400 mt-2 text-white px-32 text-md duration-300 transition-all py-5 border-4 rounded-lg hover:bg-transparent hover:text-gray-700 border-red-400'
+                {blogs?.map((blog) => (
+                  <>
+                    {!blog.isBlogForPros && (
+                      <div
+                        className='p-10 bg-slate-50 m-10 rounded-xl cursor-pointer hover:bg-slate-100'
+                        key={blog.id}
                       >
-                        Tip Creator
-                      </button>
-                    </div>
-                  </Link>
-                )}
+                        <Link href={`/post/${blog.id}`}>
+                          <a>
+                            <span className='font-bold'>Name:</span>{' '}
+                            {blog.title}
+                            <div className='flex justify-end'>
+                              <span className='font-bold mr-1'>By:</span>
+                              {blog.writerAddress === account
+                                ? 'You'
+                                : blog.writerAddress}
+                            </div>
+                          </a>
+                        </Link>
+                        <input
+                          onChange={(event) => setTipState(event.target.value)}
+                          type='text'
+                          placeholder='Tip'
+                          className='px-5 rounded-lg py-3 font-normal outline-none focus:border-red-200 border-4 border-gray-100'
+                        />
+                        <br />
+                        <button
+                          onClick={() => {
+                            tipCreator(blog.writerAddress, tipState)
+                          }}
+                          className='bg-red-400 mt-2 text-white px-32 text-md duration-300 transition-all py-5 border-4 rounded-lg hover:bg-transparent hover:text-gray-700 border-red-400'
+                        >
+                          Tip Creator
+                        </button>
+                      </div>
+                    )}
+                  </>
+                ))}
               </>
-            ))}
+            ) : null}
           </>
         )}
       </div>

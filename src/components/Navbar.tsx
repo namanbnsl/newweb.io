@@ -57,7 +57,7 @@ const Navbar = () => {
 
           <div className='flex items-center'>
             <Link href={'/'}>
-              <a className='underline hover:text-red-400 font-medium mr-16 flex items-center'>
+              <a className='underline hover:text-red-400 font-medium mr-12 ml-12 flex items-center'>
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   fill='none'
@@ -77,32 +77,9 @@ const Navbar = () => {
               </a>
             </Link>
 
-            {account ? (
-              <Link href={'/withdraw'}>
-                <a className='underline hover:text-red-400 font-medium mr-16 flex items-center'>
-                  <svg
-                    xmlns='http://www.w3.org/2000/svg'
-                    fill='none'
-                    viewBox='0 0 24 24'
-                    strokeWidth={1.5}
-                    stroke='currentColor'
-                    className='w-6 h-6 mr-1'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      d='M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-                    />
-                  </svg>
-
-                  <span>Withdraw</span>
-                </a>
-              </Link>
-            ) : null}
-
             {account && accountFound ? (
               <Link href={'/pro'}>
-                <a className='underline hover:text-red-400 font-medium mr-16 flex items-center'>
+                <a className='underline hover:text-red-400 font-medium mr-12 flex items-center'>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
@@ -124,8 +101,31 @@ const Navbar = () => {
             ) : null}
 
             {account && accountFound ? (
+              <Link href={'/your'}>
+                <a className='underline hover:text-red-400 font-medium mr-12 flex items-center'>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    strokeWidth={1.5}
+                    stroke='currentColor'
+                    className='w-6 h-6 mr-1'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z'
+                    />
+                  </svg>
+
+                  <span>Yours</span>
+                </a>
+              </Link>
+            ) : null}
+
+            {account && accountFound ? (
               <Link href={'/create'}>
-                <a className='underline hover:text-red-400 font-medium mr-16 flex items-center'>
+                <a className='underline hover:text-red-400 font-medium mr-12 flex items-center'>
                   <svg
                     xmlns='http://www.w3.org/2000/svg'
                     fill='none'
@@ -142,6 +142,29 @@ const Navbar = () => {
                   </svg>
 
                   <span>Create</span>
+                </a>
+              </Link>
+            ) : null}
+
+            {account ? (
+              <Link href={'/withdraw'}>
+                <a className='underline hover:text-red-400 font-medium mr-12 flex items-center'>
+                  <svg
+                    xmlns='http://www.w3.org/2000/svg'
+                    fill='none'
+                    viewBox='0 0 24 24'
+                    strokeWidth={1.5}
+                    stroke='currentColor'
+                    className='w-6 h-6 mr-1'
+                  >
+                    <path
+                      strokeLinecap='round'
+                      strokeLinejoin='round'
+                      d='M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+                    />
+                  </svg>
+
+                  <span>Withdraw</span>
                 </a>
               </Link>
             ) : null}

@@ -34,6 +34,18 @@ const blogRouter = createRouter()
       return blogs
     }
   })
+  .query('findForUser', {
+    input: z.object({ address: z.string() }),
+    async resolve({ input }) {
+      const blogs = await prisma.blog.findMany({
+        where: {
+          writerAddress: input.address
+        }
+      })
+
+      return blogs
+    }
+  })
   .query('findById', {
     input: z.object({ id: z.string() }),
     async resolve({ input }) {
