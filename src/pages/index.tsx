@@ -81,7 +81,7 @@ const Home: NextPage = () => {
                   onClick={() => {
                     tipCreator(blog.writerAddress, tipState)
                   }}
-                  className='bg-red-400 mt-2 text-white px-32 text-md duration-300 transition-all py-5 border-4 rounded-lg hover:bg-transparent hover:text-gray-700 border-red-400'
+                  className='bg-red-400 mt-4 text-white px-32 text-md duration-300 transition-all py-5 border-4 rounded-lg hover:bg-transparent hover:text-gray-700 border-red-400'
                 >
                   Tip Creator
                 </button>
@@ -122,7 +122,7 @@ const Home: NextPage = () => {
                           onClick={() => {
                             tipCreator(blog.writerAddress, tipState)
                           }}
-                          className='bg-red-400 mt-2 text-white px-32 text-md duration-300 transition-all py-5 border-4 rounded-lg hover:bg-transparent hover:text-gray-700 border-red-400'
+                          className='bg-red-400 mt-4 text-white px-32 text-md duration-300 transition-all py-5 border-4 rounded-lg hover:bg-transparent hover:text-gray-700 border-red-400'
                         >
                           Tip Creator
                         </button>

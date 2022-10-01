@@ -43,7 +43,7 @@ const useTip = () => {
 
       const tx = await signer.sendTransaction({
         to: addressOwner,
-        value: ethers.utils.parseEther(((parseFloat(value) * 1) / 2).toString())
+        value: ethers.utils.parseEther(value)
       })
 
       const reciept = await tx.wait()
