@@ -3,6 +3,29 @@ import { prisma } from '../db/client'
 import { z } from 'zod'
 
 const tipRouter = createRouter()
+  .mutation('updateTotalEarnings', {
+    input: z.object({ valueToBeAdded: z.number(), address: z.string() }),
+    async resolve({ input }) {
+      const currentEarning = await prisma.user.findUnique({
+        where: {
+          address: input.address
+        },
+        select: {
+          totalEarnings: true
+        }
+      })
+
+      await prisma.user.update({
+        where: {
+          address: input.address
+        },
+        data: {
+          totalEarnings:
+            (currentEarning?.totalEarnings as number) + input.valueToBeAdded
+        }
+      })
+    }
+  })
   .mutation('editEarnings', {
     input: z.object({ valueToBeAdded: z.number(), address: z.string() }),
     async resolve({ input }) {
@@ -55,6 +78,23 @@ const tipRouter = createRouter()
       })
 
       return 'Success ✅'
+    }
+  })
+  .query('getTotalEarnings', {
+    input: z.object({
+      address: z.string()
+    }),
+    async resolve({ input }) {
+      const earning = await prisma.user.findUnique({
+        where: {
+          address: input.address
+        },
+        select: {
+          totalEarnings: true
+        }
+      })
+
+      return earning?.totalEarnings
     }
   })
 

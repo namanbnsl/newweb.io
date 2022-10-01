@@ -12,7 +12,8 @@ const userRouter = createRouter()
         data: {
           address: input.address,
           isPro: false,
-          earnings: 0
+          earnings: 0,
+          totalEarnings: 0
         }
       })
 

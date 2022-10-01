@@ -21,6 +21,11 @@ const WithdrawPage: NextPage<Props> = (props: Props) => {
     { address: account && accountFound ? account : '' }
   ])
 
+  const getTotalEarnings = trpc.useQuery([
+    'tips.getTotalEarnings',
+    { address: account && accountFound ? account : '' }
+  ])
+
   if (account && accountFound && withdrawLoading) return <Loading />
 
   if (account && accountFound) {
@@ -56,6 +61,11 @@ const WithdrawPage: NextPage<Props> = (props: Props) => {
                 </span>
               </>
             )}
+
+            <span className='text-xl mt-16'>
+              You Have Earned{' '}
+              <span className='font-bold'>{getTotalEarnings.data}</span>
+            </span>
           </div>
         )}
 

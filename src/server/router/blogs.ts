@@ -16,6 +16,7 @@ const blogRouter = createRouter()
           title: input.title,
           content: input.content,
           isBlogForPros: input.isBlogForPros,
+          tipsCollected: '0',
           writer: {
             connect: {
               address: input.address
@@ -63,6 +64,36 @@ const blogRouter = createRouter()
         title: data?.title,
         content: data?.content
       }
+    }
+  })
+  .mutation('addTipsCollected', {
+    input: z.object({ valueToAdd: z.string(), id: z.string() }),
+    async resolve({ input }) {
+      const tipsCollected = await prisma.blog.findUnique({
+        where: {
+          id: input.id
+        },
+        select: {
+          tipsCollected: true
+        }
+      })
+
+      const currentTip = tipsCollected?.tipsCollected
+
+      const fullTip =
+        parseFloat(currentTip as string) +
+        parseFloat(input.valueToAdd as string)
+
+      await prisma.blog.update({
+        where: {
+          id: input.id
+        },
+        data: {
+          tipsCollected: fullTip.toString()
+        }
+      })
+
+      return 'Success ✅'
     }
   })
 

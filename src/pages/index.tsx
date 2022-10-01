@@ -79,7 +79,7 @@ const Home: NextPage = () => {
                 <br />
                 <button
                   onClick={() => {
-                    tipCreator(blog.writerAddress, tipState)
+                    tipCreator(blog.writerAddress, tipState, blog.id)
                   }}
                   className='bg-red-400 mt-4 text-white px-32 text-md duration-300 transition-all py-5 border-4 rounded-lg hover:bg-transparent hover:text-gray-700 border-red-400'
                 >
@@ -120,7 +120,7 @@ const Home: NextPage = () => {
                         <br />
                         <button
                           onClick={() => {
-                            tipCreator(blog.writerAddress, tipState)
+                            tipCreator(blog.writerAddress, tipState, blog.id)
                           }}
                           className='bg-red-400 mt-4 text-white px-32 text-md duration-300 transition-all py-5 border-4 rounded-lg hover:bg-transparent hover:text-gray-700 border-red-400'
                         >

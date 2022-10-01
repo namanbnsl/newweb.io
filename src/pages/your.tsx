@@ -45,15 +45,17 @@ const YourPage: NextPage = () => {
                     className='p-10 bg-slate-50 m-10 rounded-xl cursor-pointer hover:bg-slate-100'
                     key={blog.id}
                   >
-                    <a>
-                      <span className='font-bold'>Name:</span> {blog.title}
-                      <div className='flex justify-end'>
-                        <span className='font-bold mr-1'>By:</span>
-                        {blog.writerAddress === account
-                          ? 'You'
-                          : blog.writerAddress}
-                      </div>
-                    </a>
+                    <span className='font-bold'>Name:</span> {blog.title}
+                    <div className='flex justify-end'>
+                      <span className='font-bold mr-1'>By:</span>
+                      {blog.writerAddress === account
+                        ? 'You'
+                        : blog.writerAddress}
+                    </div>
+                    <span className='font-bold'>
+                      Your Earnings From This Blog:
+                    </span>{' '}
+                    {blog.tipsCollected}
                   </div>
                 </Link>
               ))}

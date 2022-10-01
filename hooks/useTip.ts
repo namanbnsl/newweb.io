@@ -18,8 +18,6 @@ const useTip = () => {
 
   const editEarningsMutation = trpc.useMutation(['tips.editEarnings'])
 
-  const { sendToOwnerTip } = useTransfer()
-
   if (ethereum) {
     provider = new ethers.providers.Web3Provider(ethereum)
     signer = provider.getSigner()
@@ -35,7 +33,10 @@ const useTip = () => {
 
   const [tipCreatorLoading, setTipCreatorLoading] = useState<boolean>()
 
-  const tipCreator = async (address: string, value: string) => {
+  const editTipMutation = trpc.useMutation(['blogs.addTipsCollected'])
+  const editTotalTipMutation = trpc.useMutation(['tips.updateTotalEarnings'])
+
+  const tipCreator = async (address: string, value: string, blogId: string) => {
     try {
       const addressOwner = '0x99a324a4491f432c6FEc08AF3BB4399dcBAA5096'
 
@@ -53,6 +54,18 @@ const useTip = () => {
       editEarningsMutation.mutate({
         address: address,
         valueToBeAdded: (parseFloat(value) * 1) / 2
+      })
+
+      const valueToTip = (parseFloat(value) * 1) / 2
+
+      editTipMutation.mutate({
+        id: blogId,
+        valueToAdd: valueToTip.toString()
+      })
+
+      editTotalTipMutation.mutate({
+        address: address,
+        valueToBeAdded: valueToTip
       })
 
       setTipCreatorLoading(false)
