@@ -64,7 +64,7 @@ const WithdrawPage: NextPage<Props> = (props: Props) => {
 
             <span className='text-xl mt-16'>
               You Have Earned{' '}
-              <span className='font-bold'>{getTotalEarnings.data}</span>
+              <span className='font-bold'>{getTotalEarnings.data} MATIC</span>
             </span>
           </div>
         )}

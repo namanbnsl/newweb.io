@@ -52,6 +52,10 @@ const YourPage: NextPage = () => {
                         ? 'You'
                         : blog.writerAddress}
                     </div>
+                    <div className='flex justify-end mt-2'>
+                      <span className='font-bold mr-1'>Is For Pro's:</span>
+                      {blog.isBlogForPros ? 'Yes' : 'No'}
+                    </div>
                     <span className='font-bold'>
                       Your Earnings From This Blog:
                     </span>{' '}
