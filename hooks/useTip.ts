@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { trpc } from '../src/utils/trpc'
+import useAuth from './useAuth'
 import useTransfer from './useTransfer'
 
 const useTip = () => {
@@ -10,8 +11,6 @@ const useTip = () => {
   const ethereum = typeof window !== 'undefined' && (window as any).ethereum
 
   const [isEthereum, setIsEthereum] = useState<boolean>(false)
-
-  const router = useRouter()
 
   let provider
   let signer: any
@@ -35,6 +34,8 @@ const useTip = () => {
 
   const editTipMutation = trpc.useMutation(['blogs.addTipsCollected'])
   const editTotalTipMutation = trpc.useMutation(['tips.updateTotalEarnings'])
+
+  const createTransferMutation = trpc.useMutation(['tips.createTransaction'])
 
   const tipCreator = async (address: string, value: string, blogId: string) => {
     try {
@@ -66,6 +67,14 @@ const useTip = () => {
       editTotalTipMutation.mutate({
         address: address,
         valueToBeAdded: valueToTip
+      })
+
+      createTransferMutation.mutate({
+        from: reciept.from,
+        to: address,
+        date: new Date(),
+        value: valueToTip.toString(),
+        link: `https://mumbai.polygonscan.com/tx/${reciept.transactionHash}`
       })
 
       setTipCreatorLoading(false)

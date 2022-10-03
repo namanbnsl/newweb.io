@@ -25,3 +25,12 @@ model Blog {
   isBlogForPros Boolean
   tipsCollected String
 }
+
+model Transfer {
+  id String @id @default(cuid())
+  from String
+  to String
+  date DateTime
+  value String
+  link String 
+}

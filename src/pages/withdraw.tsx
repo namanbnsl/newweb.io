@@ -26,6 +26,11 @@ const WithdrawPage: NextPage<Props> = (props: Props) => {
     { address: account && accountFound ? account : '' }
   ])
 
+  const getTransferForUser = trpc.useQuery([
+    'tips.getTransferForUser',
+    { address: account && accountFound ? account : '' }
+  ])
+
   if (account && accountFound && withdrawLoading) return <Loading />
 
   if (account && accountFound) {
@@ -36,7 +41,7 @@ const WithdrawPage: NextPage<Props> = (props: Props) => {
         {!withdrawTransactionDone && (
           <div className='flex flex-col justify-center items-center'>
             <h1 className='mt-48 text-4xl'>
-              You Have Earned {getEarnings.data} MATIC
+              You Can Withdraw {getEarnings.data} MATIC
             </h1>
 
             {getEarnings.data !== 0 ? (
@@ -66,6 +71,44 @@ const WithdrawPage: NextPage<Props> = (props: Props) => {
               You Have Earned{' '}
               <span className='font-bold'>{getTotalEarnings.data} MATIC</span>
             </span>
+
+            <>
+              <h1 className='mt-20 font-bold text-2xl'>History: </h1>
+
+              {(getTransferForUser.data?.length as number) > 0 ? (
+                <>
+                  {getTransferForUser.data?.map((transfer) => (
+                    <Link
+                      href={transfer.link}
+                      passHref
+                    >
+                      <a
+                        target={'_blank'}
+                        className='bg-slate-50 mt-5 p-8 rounded-xl hover:bg-slate-100'
+                      >
+                        <span className='font-bold mr-1'>From: </span>{' '}
+                        {transfer.from.toLocaleLowerCase()}
+                        <br />
+                        <span className='font-bold mt-4 mr-1'>To: </span> You
+                        <br />
+                        <span className='font-bold mt-4 mr-1'>Date: </span>{' '}
+                        {transfer.date.toLocaleString()}
+                        <br />
+                        <span className='font-bold mt-4 mr-1'>
+                          Value:{' '}
+                        </span>{' '}
+                        {transfer.value} MATIC
+                      </a>
+                    </Link>
+                  ))}
+                </>
+              ) : (
+                <h1 className='text-2xl mt-36'>
+                  No <span className='font-bold'>Transactions</span> Have Been
+                  Done!
+                </h1>
+              )}
+            </>
           </div>
         )}
 

@@ -97,5 +97,41 @@ const tipRouter = createRouter()
       return earning?.totalEarnings
     }
   })
+  .mutation('createTransaction', {
+    input: z.object({
+      from: z.string(),
+      to: z.string(),
+      date: z.date(),
+      value: z.string(),
+      link: z.string()
+    }),
+    async resolve({ input }) {
+      await prisma.transfer.create({
+        data: {
+          from: input.from,
+          to: input.to,
+          date: input.date,
+          value: input.value,
+          link: input.link
+        }
+      })
+
+      return 'Success ✅'
+    }
+  })
+  .query('getTransferForUser', {
+    input: z.object({
+      address: z.string()
+    }),
+    async resolve({ input }) {
+      const all = await prisma.transfer.findMany({
+        where: {
+          to: input.address
+        }
+      })
+
+      return all
+    }
+  })
 
 export default tipRouter

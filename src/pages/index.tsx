@@ -93,12 +93,9 @@ const Home: NextPage = () => {
             {account && accountFound ? (
               <>
                 {blogs?.map((blog) => (
-                  <>
+                  <div key={blog.id}>
                     {!blog.isBlogForPros && (
-                      <div
-                        className='p-10 bg-slate-50 m-10 rounded-xl cursor-pointer hover:bg-slate-100'
-                        key={blog.id}
-                      >
+                      <div className='p-10 bg-slate-50 m-10 rounded-xl cursor-pointer hover:bg-slate-100'>
                         <Link href={`/post/${blog.id}`}>
                           <a>
                             <span className='font-bold'>Name:</span>{' '}
@@ -128,7 +125,7 @@ const Home: NextPage = () => {
                         </button>
                       </div>
                     )}
-                  </>
+                  </div>
                 ))}
               </>
             ) : null}
