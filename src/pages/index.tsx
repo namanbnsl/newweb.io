@@ -1,5 +1,6 @@
 import { Blog } from '@prisma/client'
 import type { NextPage } from 'next'
+import { BLOCKED_PAGES } from 'next/dist/shared/lib/constants'
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-hot-toast'
@@ -45,6 +46,8 @@ const Home: NextPage = () => {
 
   const [tipState, setTipState] = useState('')
 
+  const findTopTipper = (id: String) => {}
+
   if (account && accountFound && tipCreatorLoading) return <Loading />
 
   return (
@@ -56,8 +59,8 @@ const Home: NextPage = () => {
           <>
             {blogs?.map((blog) => (
               <div
-                className='p-10 bg-slate-50 m-10 rounded-xl cursor-pointer hover:bg-slate-100'
                 key={blog.id}
+                className='p-10 bg-slate-50 m-10 rounded-xl cursor-pointer hover:bg-slate-100'
               >
                 <Link href={`/post/${blog.id}`}>
                   <a>
@@ -67,6 +70,24 @@ const Home: NextPage = () => {
                       {blog.writerAddress === account
                         ? 'You'
                         : blog.writerAddress}
+                    </div>
+                    <div className='flex justify-end mt-3'>
+                      <span className='font-bold mr-1'>Top Tipper:</span>{' '}
+                      {blog.topTipper.toLowerCase() ? (
+                        <>
+                          {blog.topTipper.toLowerCase() === account
+                            ? 'You'
+                            : blog.topTipper.toLowerCase()}
+                        </>
+                      ) : (
+                        'No Tipper'
+                      )}
+                    </div>
+                    <div className='flex justify-end mt-3'>
+                      <span className='font-bold mr-1'>Top Tipper Value:</span>{' '}
+                      {blog.topTipperValue !== '0'
+                        ? blog.topTipperValue
+                        : 'No Tipper'}
                     </div>
                   </a>
                 </Link>
@@ -79,7 +100,12 @@ const Home: NextPage = () => {
                 <br />
                 <button
                   onClick={() => {
-                    tipCreator(blog.writerAddress, tipState, blog.id)
+                    tipCreator(
+                      blog.writerAddress,
+                      tipState,
+                      blog.id,
+                      blog.topTipperValue
+                    )
                   }}
                   className='bg-red-400 mt-4 text-white px-32 text-md duration-300 transition-all py-5 border-4 rounded-lg hover:bg-transparent hover:text-gray-700 border-red-400'
                 >
@@ -106,6 +132,28 @@ const Home: NextPage = () => {
                                 ? 'You'
                                 : blog.writerAddress}
                             </div>
+                            <div className='flex justify-end mt-3'>
+                              <span className='font-bold mr-1'>
+                                Top Tipper:
+                              </span>{' '}
+                              {blog.topTipper.toLowerCase() ? (
+                                <>
+                                  {blog.topTipper.toLowerCase() === account
+                                    ? 'You'
+                                    : blog.topTipper.toLowerCase()}
+                                </>
+                              ) : (
+                                'No Tipper'
+                              )}
+                            </div>
+                            <div className='flex justify-end mt-3'>
+                              <span className='font-bold mr-1'>
+                                Top Tipper Value:
+                              </span>{' '}
+                              {blog.topTipperValue !== '0'
+                                ? blog.topTipperValue
+                                : 'No Tipper'}
+                            </div>
                           </a>
                         </Link>
                         <input
@@ -117,7 +165,12 @@ const Home: NextPage = () => {
                         <br />
                         <button
                           onClick={() => {
-                            tipCreator(blog.writerAddress, tipState, blog.id)
+                            tipCreator(
+                              blog.writerAddress,
+                              tipState,
+                              blog.id,
+                              blog.topTipperValue
+                            )
                           }}
                           className='bg-red-400 mt-4 text-white px-32 text-md duration-300 transition-all py-5 border-4 rounded-lg hover:bg-transparent hover:text-gray-700 border-red-400'
                         >

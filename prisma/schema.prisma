@@ -24,6 +24,9 @@ model Blog {
   content String
   isBlogForPros Boolean
   tipsCollected String
+  transfers Transfer[]
+  topTipper String
+  topTipperValue String
 }
 
 model Transfer {
@@ -32,5 +35,7 @@ model Transfer {
   to String
   date DateTime
   value String
-  link String 
+  link String
+  blog Blog @relation(fields: [blogId], references: [id])
+  blogId String
 }

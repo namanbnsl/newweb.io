@@ -1,16 +1,17 @@
+import { router } from '@trpc/server'
 import { ethers } from 'ethers'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { trpc } from '../src/utils/trpc'
-import useAuth from './useAuth'
-import useTransfer from './useTransfer'
 
 const useTip = () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ethereum = typeof window !== 'undefined' && (window as any).ethereum
 
   const [isEthereum, setIsEthereum] = useState<boolean>(false)
+
+  const router = useRouter()
 
   let provider
   let signer: any
@@ -37,7 +38,14 @@ const useTip = () => {
 
   const createTransferMutation = trpc.useMutation(['tips.createTransaction'])
 
-  const tipCreator = async (address: string, value: string, blogId: string) => {
+  const updateTopTipper = trpc.useMutation(['tips.updateTopTipper'])
+
+  const tipCreator = async (
+    address: string,
+    value: string,
+    blogId: string,
+    currentBlogTopTipValue: string
+  ) => {
     try {
       const addressOwner = '0x99a324a4491f432c6FEc08AF3BB4399dcBAA5096'
 
@@ -74,10 +82,21 @@ const useTip = () => {
         to: address,
         date: new Date(),
         value: valueToTip.toString(),
-        link: `https://mumbai.polygonscan.com/tx/${reciept.transactionHash}`
+        link: `https://mumbai.polygonscan.com/tx/${reciept.transactionHash}`,
+        blogId: blogId
       })
 
+      if (parseFloat(value) > parseFloat(currentBlogTopTipValue)) {
+        updateTopTipper.mutate({
+          blogId: blogId,
+          newTopTipperAddress: reciept.from,
+          newTopTipperAddressValue: value
+        })
+      }
+
       setTipCreatorLoading(false)
+
+      router.reload()
 
       toast.success('Tip Has Been Sent!')
     } catch (err: any) {

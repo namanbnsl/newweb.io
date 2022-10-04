@@ -103,7 +103,8 @@ const tipRouter = createRouter()
       to: z.string(),
       date: z.date(),
       value: z.string(),
-      link: z.string()
+      link: z.string(),
+      blogId: z.string()
     }),
     async resolve({ input }) {
       await prisma.transfer.create({
@@ -112,7 +113,12 @@ const tipRouter = createRouter()
           to: input.to,
           date: input.date,
           value: input.value,
-          link: input.link
+          link: input.link,
+          blog: {
+            connect: {
+              id: input.blogId
+            }
+          }
         }
       })
 
@@ -131,6 +137,24 @@ const tipRouter = createRouter()
       })
 
       return all
+    }
+  })
+  .mutation('updateTopTipper', {
+    input: z.object({
+      blogId: z.string(),
+      newTopTipperAddress: z.string(),
+      newTopTipperAddressValue: z.string()
+    }),
+    async resolve({ input }) {
+      await prisma.blog.update({
+        where: {
+          id: input.blogId
+        },
+        data: {
+          topTipper: input.newTopTipperAddress,
+          topTipperValue: input.newTopTipperAddressValue
+        }
+      })
     }
   })
 

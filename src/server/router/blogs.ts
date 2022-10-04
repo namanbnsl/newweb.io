@@ -21,7 +21,9 @@ const blogRouter = createRouter()
             connect: {
               address: input.address
             }
-          }
+          },
+          topTipper: '',
+          topTipperValue: '0'
         }
       })
 
@@ -94,6 +96,18 @@ const blogRouter = createRouter()
       })
 
       return 'Success ✅'
+    }
+  })
+  .mutation('getTransfersOfABlog', {
+    input: z.object({ blogId: z.string() }),
+    async resolve({ input }) {
+      const transfers = await prisma.transfer.findMany({
+        where: {
+          blogId: input.blogId
+        }
+      })
+
+      return transfers
     }
   })
 
