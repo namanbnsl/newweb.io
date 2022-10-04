@@ -139,23 +139,5 @@ const tipRouter = createRouter()
       return all
     }
   })
-  .mutation('updateTopTipper', {
-    input: z.object({
-      blogId: z.string(),
-      newTopTipperAddress: z.string(),
-      newTopTipperAddressValue: z.string()
-    }),
-    async resolve({ input }) {
-      await prisma.blog.update({
-        where: {
-          id: input.blogId
-        },
-        data: {
-          topTipper: input.newTopTipperAddress,
-          topTipperValue: input.newTopTipperAddressValue
-        }
-      })
-    }
-  })
 
 export default tipRouter

@@ -38,14 +38,7 @@ const useTip = () => {
 
   const createTransferMutation = trpc.useMutation(['tips.createTransaction'])
 
-  const updateTopTipper = trpc.useMutation(['tips.updateTopTipper'])
-
-  const tipCreator = async (
-    address: string,
-    value: string,
-    blogId: string,
-    currentBlogTopTipValue: string
-  ) => {
+  const tipCreator = async (address: string, value: string, blogId: string) => {
     try {
       const addressOwner = '0x99a324a4491f432c6FEc08AF3BB4399dcBAA5096'
 
@@ -85,18 +78,6 @@ const useTip = () => {
         link: `https://mumbai.polygonscan.com/tx/${reciept.transactionHash}`,
         blogId: blogId
       })
-
-      if (parseFloat(value) > parseFloat(currentBlogTopTipValue)) {
-        updateTopTipper.mutate({
-          blogId: blogId,
-          newTopTipperAddress: reciept.from,
-          newTopTipperAddressValue: value
-        })
-      }
-
-      setTipCreatorLoading(false)
-
-      router.reload()
 
       toast.success('Tip Has Been Sent!')
     } catch (err: any) {
