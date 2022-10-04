@@ -92,32 +92,39 @@ const YourPage: NextPage = () => {
 
         <div className='flex flex-col mt-12 max-w-6xl mx-auto'>
           <h1 className='text-3xl font-bold mt-6'>Summary: </h1>
-          <div className='flex mt-6'>
-            <span className='font-bold mr-1'>Blog Tipped The Most:</span>{' '}
-            <Link href={earnedMost.link}>
-              <a className='underline hover:text-red-400'>{earnedMost.name}</a>
-            </Link>
-          </div>
 
-          <div className='flex mt-6'>
-            <span className='font-bold mr-1'>Blog Tipped The Most Value: </span>{' '}
-            <span className='underline'>{earnedMost.value}</span>
-          </div>
+          <div className='ml-8'>
+            <div className='flex mt-6'>
+              <span className='font-bold mr-1'>Blog Tipped The Most:</span>{' '}
+              <Link href={earnedMost.link}>
+                <a className='underline hover:text-red-400'>
+                  {earnedMost.name}
+                </a>
+              </Link>
+            </div>
 
-          <div className='flex mt-6'>
-            <span className='font-bold mr-1'>
-              Blog Tipped The Most Is For Pro's:{' '}
-            </span>{' '}
-            <span className='underline'>
-              {earnedMost.isForPros ? 'Yes' : 'No'}
-            </span>
-          </div>
+            <div className='flex mt-6'>
+              <span className='font-bold mr-1'>
+                Blog Tipped The Most Value:{' '}
+              </span>{' '}
+              <span className='underline'>{earnedMost.value}</span>
+            </div>
 
-          <div className='flex mt-6'>
-            <span className='font-bold mr-1'>Tipped Most By: </span>{' '}
-            <span className='underline'>
-              {mostTipper.address.toLowerCase()}
-            </span>
+            <div className='flex mt-6'>
+              <span className='font-bold mr-1'>
+                Blog Tipped The Most Is For Pro's:{' '}
+              </span>{' '}
+              <span className='underline'>
+                {earnedMost.isForPros ? 'Yes' : 'No'}
+              </span>
+            </div>
+
+            <div className='flex mt-6'>
+              <span className='font-bold mr-1'>Tipped Most By: </span>{' '}
+              <span className='underline'>
+                {mostTipper.address.toLowerCase()}
+              </span>
+            </div>
           </div>
 
           {blogs?.length ? (
