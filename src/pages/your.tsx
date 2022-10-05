@@ -1,5 +1,5 @@
 import type { NextPage } from 'next'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import useAuth from '../../hooks/useAuth'
 import Navbar from '../components/Navbar'
 import { trpc } from '../utils/trpc'
@@ -43,47 +43,66 @@ const YourPage: NextPage = () => {
     value: 0
   })
 
+  const [done, setDone] = useState<Boolean>()
+
   useEffect(() => {
-    if (
-      getYourBlogsQuery.data &&
-      !getYourBlogsQuery.isLoading &&
-      !getYourBlogsQuery.isError
-    ) {
-      setBlogs(getYourBlogsQuery.data)
-    }
+    if (getYourBlogsQuery.isFetched && getYourTransfers.isFetched) {
+      const doThis = () => {
+        if (
+          getYourBlogsQuery.data &&
+          !getYourBlogsQuery.isLoading &&
+          !getYourBlogsQuery.isError
+        ) {
+          setBlogs(getYourBlogsQuery.data)
+        }
 
-    if (
-      getYourTransfers.data &&
-      !getYourTransfers.isLoading &&
-      !getYourTransfers.isError
-    ) {
-      setTransfers(getYourTransfers.data)
-    }
+        if (
+          getYourTransfers.data &&
+          !getYourTransfers.isLoading &&
+          !getYourTransfers.isError
+        ) {
+          setTransfers(getYourTransfers.data)
+        }
 
-    if (error) {
-      toast.error('Make Sure You Have A Wallet!')
-    }
+        if (error) {
+          toast.error('Make Sure You Have A Wallet!')
+        }
 
-    blogs?.map((blog) => {
-      if (parseFloat(blog.tipsCollected) > earnedMost.value) {
-        setEarnedMost({
-          name: blog.title,
-          link: `/post/${blog.id}`,
-          value: parseFloat(blog.tipsCollected),
-          isForPros: blog.isBlogForPros
+        blogs?.map((blog) => {
+          setDone(false)
+
+          if (parseFloat(blog.tipsCollected) > earnedMost.value) {
+            setEarnedMost({
+              name: blog.title,
+              link: `/post/${blog.id}`,
+              value: parseFloat(blog.tipsCollected),
+              isForPros: blog.isBlogForPros
+            })
+          }
+
+          setDone(true)
+        })
+
+        transfers?.map((transfer) => {
+          setDone(false)
+
+          if (
+            parseFloat(transfer.value) + mostTipper.value >
+            mostTipper.value
+          ) {
+            setMostTipper({
+              address: transfer.from,
+              value: parseFloat(transfer.value) + mostTipper.value
+            })
+          }
+
+          setDone(true)
         })
       }
-    })
 
-    transfers?.map((transfer) => {
-      if (parseFloat(transfer.value) + mostTipper.value > mostTipper.value) {
-        setMostTipper({
-          address: transfer.from,
-          value: parseFloat(transfer.value) + mostTipper.value
-        })
-      }
-    })
-  }, [getYourBlogsQuery, earnedMost, getYourTransfers, mostTipper])
+      doThis()
+    }
+  }, [getYourTransfers.data, getYourBlogsQuery.data, transfers, blogs])
 
   if (account && accountFound) {
     return (
@@ -130,28 +149,27 @@ const YourPage: NextPage = () => {
           {blogs?.length ? (
             <>
               {blogs?.map((blog) => (
-                <Link
-                  key={blog.id}
+                <a
                   href={`/post/${blog.id}`}
+                  key={blog.id}
+                  className='p-10 bg-slate-50 m-10 rounded-xl cursor-pointer hover:bg-slate-100'
                 >
-                  <div className='p-10 bg-slate-50 m-10 rounded-xl cursor-pointer hover:bg-slate-100'>
-                    <span className='font-bold'>Name:</span> {blog.title}
-                    <div className='flex justify-end'>
-                      <span className='font-bold mr-1'>By:</span>
-                      {blog.writerAddress === account
-                        ? 'You'
-                        : blog.writerAddress}
-                    </div>
-                    <div className='flex justify-end mt-2'>
-                      <span className='font-bold mr-1'>Is For Pro's:</span>
-                      {blog.isBlogForPros ? 'Yes' : 'No'}
-                    </div>
-                    <span className='font-bold'>
-                      Your Earnings From This Blog:
-                    </span>{' '}
-                    {blog.tipsCollected}
+                  <span className='font-bold'>Name:</span> {blog.title}
+                  <div className='flex justify-end'>
+                    <span className='font-bold mr-1'>By:</span>
+                    {blog.writerAddress === account
+                      ? 'You'
+                      : blog.writerAddress}
                   </div>
-                </Link>
+                  <div className='flex justify-end mt-2'>
+                    <span className='font-bold mr-1'>Is For Pro's:</span>
+                    {blog.isBlogForPros ? 'Yes' : 'No'}
+                  </div>
+                  <span className='font-bold'>
+                    Your Earnings From This Blog:
+                  </span>{' '}
+                  {blog.tipsCollected}
+                </a>
               ))}
             </>
           ) : (

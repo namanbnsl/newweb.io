@@ -14,8 +14,6 @@ const Navbar = () => {
   ])
 
   useEffect(() => {
-    console.log(isProQuery.data)
-
     if (
       account &&
       isProQuery.data &&
@@ -118,7 +116,7 @@ const Navbar = () => {
                     />
                   </svg>
 
-                  <span>Yours</span>
+                  <span>Your</span>
                 </a>
               </Link>
             ) : null}
