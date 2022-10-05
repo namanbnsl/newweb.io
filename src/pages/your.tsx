@@ -149,27 +149,28 @@ const YourPage: NextPage = () => {
           {blogs?.length ? (
             <>
               {blogs?.map((blog) => (
-                <a
+                <Link
                   href={`/post/${blog.id}`}
                   key={blog.id}
-                  className='p-10 bg-slate-50 m-10 rounded-xl cursor-pointer hover:bg-slate-100'
                 >
-                  <span className='font-bold'>Name:</span> {blog.title}
-                  <div className='flex justify-end'>
-                    <span className='font-bold mr-1'>By:</span>
-                    {blog.writerAddress === account
-                      ? 'You'
-                      : blog.writerAddress}
-                  </div>
-                  <div className='flex justify-end mt-2'>
-                    <span className='font-bold mr-1'>Is For Pro's:</span>
-                    {blog.isBlogForPros ? 'Yes' : 'No'}
-                  </div>
-                  <span className='font-bold'>
-                    Your Earnings From This Blog:
-                  </span>{' '}
-                  {blog.tipsCollected}
-                </a>
+                  <a className='p-10 bg-slate-50 m-10 rounded-xl cursor-pointer hover:bg-slate-100'>
+                    <span className='font-bold'>Name:</span> {blog.title}
+                    <div className='flex justify-end'>
+                      <span className='font-bold mr-1'>By:</span>
+                      {blog.writerAddress === account
+                        ? 'You'
+                        : blog.writerAddress}
+                    </div>
+                    <div className='flex justify-end mt-2'>
+                      <span className='font-bold mr-1'>Is For Pro's:</span>
+                      {blog.isBlogForPros ? 'Yes' : 'No'}
+                    </div>
+                    <span className='font-bold'>
+                      Your Earnings From This Blog:
+                    </span>{' '}
+                    {blog.tipsCollected}
+                  </a>
+                </Link>
               ))}
             </>
           ) : (
