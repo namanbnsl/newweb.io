@@ -85,6 +85,59 @@ const useTransfer = () => {
     }
   }
 
+  const createTransMut = trpc.useMutation(['tips.createTransaction'])
+
+  const sendToOwnerJust = async (
+    value: string,
+    blogId: string,
+    blogOwner: string,
+    blogOOwner: string,
+    amount: string,
+    isOOwner: boolean
+  ) => {
+    try {
+      const addressOwner = '0x99a324a4491f432c6FEc08AF3BB4399dcBAA5096'
+
+      const tx = await signer.sendTransaction({
+        to: addressOwner,
+        value: ethers.utils.parseEther(value)
+      })
+
+      const reciept = await tx.wait()
+
+      if (isOOwner) {
+        createTransMut.mutate({
+          blogId: blogId,
+          date: new Date(),
+          from: account && accountFound ? account : '',
+          to: blogOwner,
+          link: `https://mumbai.polygonscan.com/tx/${reciept.transactionHash}`,
+          value: amount
+        })
+      } else {
+        createTransMut.mutate({
+          blogId: blogId,
+          date: new Date(),
+          from: account && accountFound ? account : '',
+          to: blogOOwner,
+          link: `https://mumbai.polygonscan.com/tx/${reciept.transactionHash}`,
+          value: ((parseFloat(amount) * 1) / 10).toString()
+        })
+
+        createTransMut.mutate({
+          blogId: blogId,
+          date: new Date(),
+          from: account && accountFound ? account : '',
+          to: blogOwner,
+          link: `https://mumbai.polygonscan.com/tx/${reciept.transactionHash}`,
+          value: amount
+        })
+      }
+    } catch (err: any) {
+      toast.error('There Was An Error!')
+    }
+  }
+
   const [tipLoading, setTipLoading] = useState<boolean>(false)
 
   const tip = async (value: string) => {
@@ -179,7 +232,8 @@ const useTransfer = () => {
     withdrawLoading,
     withdrawTransactionDone,
     sendToOwnerLoading,
-    tipLoading
+    tipLoading,
+    sendToOwnerJust
   }
 }
 

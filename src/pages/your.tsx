@@ -6,6 +6,7 @@ import { trpc } from '../utils/trpc'
 import { Blog, Transfer } from '@prisma/client'
 import toast from 'react-hot-toast'
 import Link from 'next/link'
+import useRoyalty from '../../hooks/useRoyalty'
 
 const YourPage: NextPage = () => {
   const { account, accountFound, connectWallet, error } = useAuth()
@@ -22,6 +23,8 @@ const YourPage: NextPage = () => {
 
   const [blogs, setBlogs] = useState<Array<Blog>>()
   const [transfers, setTransfers] = useState<Array<Transfer>>()
+
+  const { sell } = useRoyalty()
 
   const [earnedMost, setEarnedMost] = useState<{
     name: string
@@ -104,6 +107,8 @@ const YourPage: NextPage = () => {
     }
   }, [getYourTransfers.data, getYourBlogsQuery.data, transfers, blogs])
 
+  const [sellAmount, setSellAmount] = useState('')
+
   if (account && accountFound) {
     return (
       <>
@@ -149,28 +154,56 @@ const YourPage: NextPage = () => {
           {blogs?.length ? (
             <>
               {blogs?.map((blog) => (
-                <Link
-                  href={`/post/${blog.id}`}
+                <div
                   key={blog.id}
+                  className='p-10 bg-slate-50 m-10 rounded-xl cursor-pointer hover:bg-slate-100'
                 >
-                  <a className='p-10 bg-slate-50 m-10 rounded-xl cursor-pointer hover:bg-slate-100'>
-                    <span className='font-bold'>Name:</span> {blog.title}
-                    <div className='flex justify-end'>
-                      <span className='font-bold mr-1'>By:</span>
-                      {blog.writerAddress === account
-                        ? 'You'
-                        : blog.writerAddress}
-                    </div>
-                    <div className='flex justify-end mt-2'>
-                      <span className='font-bold mr-1'>Is For Pro's:</span>
-                      {blog.isBlogForPros ? 'Yes' : 'No'}
-                    </div>
-                    <span className='font-bold'>
+                  <Link href={`/post/${blog.id}`}>
+                    <a>
+                      <span className='font-bold'>Name:</span> {blog.title}
+                    </a>
+                  </Link>
+                  <div className='flex justify-end'>
+                    <span className='font-bold mr-1'>By:</span>
+                    {blog.writerAddress === account
+                      ? 'You'
+                      : blog.writerAddress}
+                  </div>
+                  <div className='flex justify-end mt-2'>
+                    <span className='font-bold mr-1'>Is For Pro's:</span>
+                    {blog.isBlogForPros ? 'Yes' : 'No'}
+                  </div>
+                  <div className='flex justify-end mt-2'>
+                    <span className='font-bold mr-1'>
                       Your Earnings From This Blog:
                     </span>{' '}
-                    {blog.tipsCollected}
-                  </a>
-                </Link>
+                    {blog.tipsCollected} MATIC
+                  </div>
+                  {!blog.isSell ? (
+                    <div className='flex justify-end mt-3'>
+                      <input
+                        onChange={(event) => setSellAmount(event.target.value)}
+                        type='text'
+                        placeholder='Sell Amount'
+                        className='px-5 rounded-lg py-3 font-normal outline-none focus:border-red-200 border-4 border-gray-100'
+                      />
+
+                      <button
+                        onClick={() => sell(blog.id, sellAmount)}
+                        className='bg-red-400 ml-3 text-white px-32 text-md duration-300 transition-all py-5 border-4 rounded-lg hover:bg-transparent hover:text-gray-700 border-red-400'
+                      >
+                        Sell
+                      </button>
+                    </div>
+                  ) : (
+                    <div className='flex justify-end mt-2'>
+                      <span className='font-bold mr-1'>
+                        You Are Selling This For:
+                      </span>
+                      {blog.sellAmount} MATIC
+                    </div>
+                  )}
+                </div>
               ))}
             </>
           ) : (

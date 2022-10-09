@@ -17,13 +17,12 @@ const blogRouter = createRouter()
           content: input.content,
           isBlogForPros: input.isBlogForPros,
           tipsCollected: '0',
+          orignalOwner: input.address,
           writer: {
             connect: {
               address: input.address
             }
-          },
-          topTipper: '',
-          topTipperValue: '0'
+          }
         }
       })
 

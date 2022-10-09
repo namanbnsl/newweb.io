@@ -25,6 +25,9 @@ model Blog {
   isBlogForPros Boolean
   tipsCollected String
   transfers Transfer[]
+  isSell Boolean @default(false)
+  orignalOwner String @default("")
+  sellAmount Float @default(0)
 }
 
 model Transfer {

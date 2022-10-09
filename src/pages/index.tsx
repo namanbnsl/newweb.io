@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import useAuth from '../../hooks/useAuth'
+import useRoyalty from '../../hooks/useRoyalty'
 import useTip from '../../hooks/useTip'
 import Loading from '../components/Loading'
 import Navbar from '../components/Navbar'
@@ -45,6 +46,10 @@ const Home: NextPage = () => {
 
   const [tipState, setTipState] = useState('')
 
+  const { buy, buyLoading } = useRoyalty()
+
+  if (account && accountFound && buyLoading) return <Loading />
+
   if (account && accountFound && tipCreatorLoading) return <Loading />
 
   return (
@@ -85,6 +90,22 @@ const Home: NextPage = () => {
                 >
                   Tip Creator
                 </button>
+
+                {blog.isSell && (
+                  <button
+                    onClick={() => {
+                      buy(
+                        blog.id,
+                        blog.sellAmount.toString(),
+                        blog.orignalOwner,
+                        blog.writerAddress
+                      )
+                    }}
+                    className='bg-red-400 mt-4 ml-4 text-white px-32 text-md duration-300 transition-all py-5 border-4 rounded-lg hover:bg-transparent hover:text-gray-700 border-red-400'
+                  >
+                    Buy For {blog.sellAmount} MATIC
+                  </button>
+                )}
               </div>
             ))}
           </>
@@ -123,6 +144,22 @@ const Home: NextPage = () => {
                         >
                           Tip Creator
                         </button>
+
+                        {blog.isSell && (
+                          <button
+                            onClick={() => {
+                              buy(
+                                blog.id,
+                                blog.sellAmount.toString(),
+                                blog.orignalOwner,
+                                blog.writerAddress
+                              )
+                            }}
+                            className='bg-red-400 mt-4 ml-4 text-white px-32 text-md duration-300 transition-all py-5 border-4 rounded-lg hover:bg-transparent hover:text-gray-700 border-red-400'
+                          >
+                            Buy For {blog.sellAmount} MATIC
+                          </button>
+                        )}
                       </div>
                     )}
                   </div>
