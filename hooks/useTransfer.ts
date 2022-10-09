@@ -130,7 +130,7 @@ const useTransfer = () => {
           from: account && accountFound ? account : '',
           to: blogOwner,
           link: `https://mumbai.polygonscan.com/tx/${reciept.transactionHash}`,
-          value: amount
+          value: ((parseFloat(amount) * 9) / 10).toString()
         })
       }
     } catch (err: any) {
