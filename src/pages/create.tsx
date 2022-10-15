@@ -1,20 +1,22 @@
 import type { NextPage } from 'next'
-import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import useAuth from '../../hooks/useAuth'
+import useStorage from '../../hooks/useStorage'
 import Navbar from '../components/Navbar'
 import { trpc } from '../utils/trpc'
 
-const CreatePage: NextPage = () => {
+interface Props {
+  api_token: string
+}
+
+const CreatePage: NextPage<Props> = (props: Props) => {
   const { account, accountFound, connectWallet } = useAuth()
 
   const [shouldShow, setShouldShow] = useState<boolean>()
   const [isChecked, setIsChecked] = useState<boolean>(false)
 
   const createPostMutation = trpc.useMutation(['blogs.createBlog'])
-
-  const router = useRouter()
 
   const handleOnChange = () => {
     setIsChecked(!isChecked)
@@ -30,6 +32,8 @@ const CreatePage: NextPage = () => {
       setShouldShow(false)
     }
   })
+
+  const { storeFiles } = useStorage()
 
   if (shouldShow)
     return (
@@ -93,9 +97,13 @@ const CreatePage: NextPage = () => {
                       isBlogForPros: isChecked as boolean
                     })
 
-                    toast.success('Blog Created!')
+                    storeFiles(
+                      props.api_token,
+                      titleRef.current?.value as string,
+                      contentRef.current?.value as string
+                    )
 
-                    router.replace('/')
+                    toast.success('Blog Created!')
                   }
                 } catch (err) {
                   toast.error('There Was An Error!')
@@ -120,6 +128,16 @@ const CreatePage: NextPage = () => {
       </button>
     </div>
   )
+}
+
+export const getServerSideProps = (context: any) => {
+  const api_token = process.env.API_TOKEN
+
+  return {
+    props: {
+      api_token
+    }
+  }
 }
 
 export default CreatePage

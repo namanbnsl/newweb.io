@@ -16,6 +16,7 @@ model User {
   totalEarnings Float
 }
 
+
 model Blog {
   id String @id @default(cuid())
   writer User @relation(fields: [writerAddress], references: [address])
