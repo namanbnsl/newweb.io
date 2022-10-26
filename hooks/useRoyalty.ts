@@ -1,9 +1,12 @@
+import { ethers } from 'ethers'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { toast } from 'react-hot-toast'
 import { trpc } from '../src/utils/trpc'
 import useAuth from './useAuth'
 import useTransfer from './useTransfer'
+
+import { abi } from '../backend/artifacts/contracts/CreateNft.sol/CreateNFT.json'
 
 const useRoyalty = () => {
   const setSellMut = trpc.useMutation(['royalty.setSell'])
@@ -18,6 +21,16 @@ const useRoyalty = () => {
   const [buyLoading, setLoading] = useState<boolean>()
 
   const router = useRouter()
+
+  const ethereum = typeof window !== 'undefined' && (window as any).ethereum
+
+  let provider: any
+  let signer: any
+
+  if (ethereum) {
+    provider = new ethers.providers.Web3Provider(ethereum)
+    signer = provider.getSigner()
+  }
 
   const sell = async (blogId: string, sellAmount: string) => {
     if (sellAmount && parseFloat(sellAmount) !== 0) {
@@ -35,11 +48,14 @@ const useRoyalty = () => {
     router.reload()
   }
 
+  const updateTokenCounter = trpc.useMutation(['blogs.updateTokenCounter'])
+
   const buy = async (
     blogId: string,
     sellAmount: string,
     oAddress: string,
-    blogOwner: string
+    blogOwner: string,
+    tokenUri: string
   ) => {
     if (sellAmount && parseFloat(sellAmount) !== 0) {
       setLoading(true)
@@ -65,6 +81,17 @@ const useRoyalty = () => {
       }
 
       if (oAddress === blogOwner) {
+        const myContract = new ethers.Contract(
+          '0xC1c10366412Dc6A7dfbcD377a6A8787504A667b3',
+          abi,
+          signer
+        )
+
+        const mintToken = await myContract.mintNft(tokenUri)
+        const mintNftReciept = await mintToken.wait()
+
+        await updateTokenCounter.mutateAsync()
+
         await updateEarningsMut.mutateAsync({
           address: oAddress,
           valueToBeAdded: parseFloat(sellAmount)
@@ -81,6 +108,17 @@ const useRoyalty = () => {
           newAddress: account && accountFound ? account : ''
         })
       } else {
+        const myContract = new ethers.Contract(
+          '0xC1c10366412Dc6A7dfbcD377a6A8787504A667b3',
+          abi,
+          signer
+        )
+
+        const mintToken = await myContract.mintNft(tokenUri)
+        const mintNftReciept = await mintToken.wait()
+
+        await updateTokenCounter.mutateAsync()
+
         await updateEarningsMut.mutateAsync({
           address: oAddress,
           valueToBeAdded: (parseFloat(sellAmount) * 1) / 10

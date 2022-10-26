@@ -98,7 +98,8 @@ const Home: NextPage = () => {
                         blog.id,
                         blog.sellAmount.toString(),
                         blog.orignalOwner,
-                        blog.writerAddress
+                        blog.writerAddress,
+                        blog.tokenUri
                       )
                     }}
                     className='bg-red-400 mt-4 ml-4 text-white px-32 text-md duration-300 transition-all py-5 border-4 rounded-lg hover:bg-transparent hover:text-gray-700 border-red-400'
@@ -152,7 +153,8 @@ const Home: NextPage = () => {
                                 blog.id,
                                 blog.sellAmount.toString(),
                                 blog.orignalOwner,
-                                blog.writerAddress
+                                blog.writerAddress,
+                                blog.tokenUri
                               )
                             }}
                             className='bg-red-400 mt-4 ml-4 text-white px-32 text-md duration-300 transition-all py-5 border-4 rounded-lg hover:bg-transparent hover:text-gray-700 border-red-400'

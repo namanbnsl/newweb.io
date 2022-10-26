@@ -8,7 +8,7 @@ const Loading: React.FC = () => {
         type='spin'
       />
 
-      <span className='mt-4'>Your Transaction Is Happening...</span>
+      <span className='mt-4'>Loading...</span>
     </div>
   )
 }

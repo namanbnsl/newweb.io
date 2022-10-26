@@ -1,10 +1,11 @@
+import { router } from '@trpc/server'
 import type { NextPage } from 'next'
-import { useEffect, useRef, useState } from 'react'
+import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import { toast } from 'react-hot-toast'
 import useAuth from '../../hooks/useAuth'
 import useStorage from '../../hooks/useStorage'
+import Loading from '../components/Loading'
 import Navbar from '../components/Navbar'
-import { trpc } from '../utils/trpc'
 
 interface Props {
   api_token: string
@@ -15,8 +16,6 @@ const CreatePage: NextPage<Props> = (props: Props) => {
 
   const [shouldShow, setShouldShow] = useState<boolean>()
   const [isChecked, setIsChecked] = useState<boolean>(false)
-
-  const createPostMutation = trpc.useMutation(['blogs.createBlog'])
 
   const handleOnChange = () => {
     setIsChecked(!isChecked)
@@ -33,7 +32,13 @@ const CreatePage: NextPage<Props> = (props: Props) => {
     }
   })
 
-  const { storeFiles } = useStorage()
+  const [loading, setLoading] = useState<boolean>()
+
+  const { createPost } = useStorage()
+
+  if (account && accountFound && loading) return <Loading />
+
+  const nftRef = useRef<any>()
 
   if (shouldShow)
     return (
@@ -44,7 +49,6 @@ const CreatePage: NextPage<Props> = (props: Props) => {
           <h1 className='mt-48 text-4xl'>
             Create A <span className='font-bold underline'>newweb.io</span> Post
           </h1>
-
           <span className='text-xl font-bold mt-24'>
             Title:{' '}
             <input
@@ -54,7 +58,6 @@ const CreatePage: NextPage<Props> = (props: Props) => {
               className='px-5 ml-2 rounded-lg py-3 font-normal outline-none focus:border-red-200 border-4 border-gray-100'
             />
           </span>
-
           <span className='text-xl font-bold mt-24'>
             <textarea
               ref={contentRef}
@@ -64,6 +67,17 @@ const CreatePage: NextPage<Props> = (props: Props) => {
               className='px-5 ml-2 rounded-lg py-3 font-normal outline-none focus:border-red-200 border-4 border-gray-100'
             />
           </span>
+
+          <div className='mt-4'>
+            <span>File For NFT: </span>
+
+            <input
+              type='file'
+              accept='image/png'
+              ref={nftRef}
+              required
+            />
+          </div>
 
           <div className='flex gap-x-6'>
             {isChecked ? (
@@ -88,26 +102,23 @@ const CreatePage: NextPage<Props> = (props: Props) => {
 
             <button
               onClick={() => {
+                setLoading(true)
+
                 try {
                   if (account && accountFound) {
-                    createPostMutation.mutate({
-                      address: account,
-                      content: contentRef.current?.value as string,
-                      title: titleRef.current?.value as string,
-                      isBlogForPros: isChecked as boolean
-                    })
-
-                    storeFiles(
-                      props.api_token,
+                    createPost(
+                      contentRef.current?.value as string,
                       titleRef.current?.value as string,
-                      contentRef.current?.value as string
+                      isChecked as boolean,
+                      props.api_token,
+                      nftRef
                     )
-
-                    toast.success('Blog Created!')
                   }
                 } catch (err) {
                   toast.error('There Was An Error!')
                 }
+
+                setLoading(false)
               }}
               className='bg-red-400 mt-16 text-white px-32 text-md duration-300 transition-all py-5 border-4 rounded-lg hover:bg-transparent hover:text-gray-700 border-red-400'
             >
