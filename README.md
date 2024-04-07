@@ -2,7 +2,7 @@
 
 ## How to run -
 
-First Step - `git clone https://github.com/coding1101/newweb.io.git`
+First Step - `git clone https://github.com/namanbnsl/newweb.io.git`
 <br />
 
 Second Step - `cd newweb.io`
